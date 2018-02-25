@@ -19,12 +19,14 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
 	def get_settings_defaults(self):
 	    return dict(
 		comport="COM3",
+		baudrate=9600,
 		url="https://en.wikipedia.org/wiki/Hello_world"
 		)
 
 	def get_config_vars(self):
 		return dict(
-			comport=self._settings.get(["comport"])
+			comport=self._settings.get(["comport"]),
+			baudrate=self._settings.get(["baudrate"])
 		)
 
 	def get_template_configs(self):
