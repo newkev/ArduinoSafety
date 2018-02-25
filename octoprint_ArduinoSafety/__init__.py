@@ -45,9 +45,12 @@ class SerialThread(Thread):
 	# comport parameters
 	portname = ""
 	baudrate = 9600
-
+	
 	# thread parameters
 	interrupted = False
+	temperature = 0
+	humidity = 0
+	gas = 0
 
 	# msg parser vars
 	msgParsingState = 0
@@ -82,7 +85,13 @@ class SerialThread(Thread):
 		while not self.interrupted:
 			try:
 				readl = self.port.readline()
-				self.cbClass.getLogger().info(readl)
+				if readl.find("T:") > -1
+					temperature = readl[3:]
+				if readl.find("H:") > -1
+					humidity = readl[3:]
+				if readl.find("G:") > -1
+					gas = readl[3:]
+				self.cbClass.getLogger().info(gas)
 			except:
 				pass
 		self.port.close()
