@@ -85,11 +85,11 @@ class SerialThread(Thread):
 		while not self.interrupted:
 			try:
 				readl = self.port.readline()
-				if readl.find("T:") > -1
+				if readl.find("T:") > -1:
 					temperature = readl[3:]
-				if readl.find("H:") > -1
+				if readl.find("H:") > -1:
 					humidity = readl[3:]
-				if readl.find("G:") > -1
+				if readl.find("G:") > -1:
 					gas = readl[3:]
 				self.cbClass.getLogger().info(gas)
 			except:
