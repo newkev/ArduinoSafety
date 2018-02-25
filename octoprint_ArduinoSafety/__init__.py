@@ -18,7 +18,7 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
 
 	def get_settings_defaults(self):
 	    return dict(
-		comport="ttyACM0",
+		comport="/dev/ttyUSB0",
 		baudrate=9600,
 		url="https://en.wikipedia.org/wiki/Hello_world"
 		)
@@ -56,7 +56,7 @@ class SerialThread(Thread):
 	countBytesRead = 0
 	ackPending = False
 
-	#	comport = "ttyUSB0",#
+	#	comport = "/dev/ttyUSB0",#
 	# baudrate = 9600,
 
 	def __init__(self, callbackClass, config):
@@ -67,6 +67,7 @@ class SerialThread(Thread):
 
 		try:
 			self.port = serial.Serial(self.portname, baudrate=self.baudrate, timeout=3.0)
+			time.sleep(5)
 			callbackClass.getLogger().info("Arduino Comthread started")
 		except:
 			self.interrupt()
@@ -80,65 +81,8 @@ class SerialThread(Thread):
 
 		while not self.interrupted:
 			try:
-				readbyte = self.port.read(1)
-				if self.msgParsingState == 0:
-					if readbyte == '\x80':
-						self.bytesRead.append(ord(readbyte))
-						self.msgParsingState += 1
-						self.countBytesRead += 1
-
-				elif self.msgParsingState == 1:
-					self.telegramLength = ord(readbyte)
-					self.bytesRead.append(ord(readbyte))
-					self.msgParsingState += 1
-					self.countBytesRead += 1
-
-				elif self.msgParsingState == 2:
-					self.command = ord(readbyte)
-					self.bytesRead.append(ord(readbyte))
-					self.msgParsingState += 1
-					self.countBytesRead += 1
-					if self.telegramLength == 7:
-						self.msgParsingState += 1
-
-				elif self.msgParsingState == 3:
-					self.bytesRead.append(ord(readbyte))
-					self.payload.append(ord(readbyte))
-					self.countBytesRead += 1
-					if self.countBytesRead == self.telegramLength - 4:
-						self.msgParsingState += 1
-				elif self.msgParsingState == 4:
-					self.crc32 = ord(readbyte)
-					self.countBytesRead += 1
-					self.msgParsingState += 1
-
-				elif self.msgParsingState == 5:
-					self.crc32 |= ord(readbyte) << 8
-					self.countBytesRead += 1
-					self.msgParsingState += 1
-
-				elif self.msgParsingState == 6:
-					self.crc32 |= ord(readbyte) << 16
-					self.countBytesRead += 1
-					self.msgParsingState += 1
-
-				elif self.msgParsingState == 7:
-					self.crc32 |= ord(readbyte) << 24
-					self.countBytesRead += 1
-					self.msgParsingState += 1
-					crc32 = binascii.crc32(bytearray(self.bytesRead)) % (1 << 32)
-					if crc32 == self.crc32:
-						self.performActions(self.command, self.payload)
-					else:
-						self.sendNack()
-
-					self.msgParsingState = 0
-					self.crc32 = 0
-					self.countBytesRead = 0
-					self.bytesRead = []
-					self.payload = []
-					self.telegramLength = 0
-					self.command = 0
+				readl = self.port.readline()
+				self.cbClass.getLogger().info(readl)
 			except:
 				pass
 		self.port.close()
