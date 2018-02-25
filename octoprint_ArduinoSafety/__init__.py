@@ -34,6 +34,9 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
         	dict(type="navbar", custom_bindings=False),
 	        dict(type="settings", custom_bindings=False)
 	    ]
+	
+	def getLogger(self):
+		return self._logger
 
 __plugin_name__ = "Arduino Safety"
 __plugin_implementation__ = HelloWorldPlugin()
