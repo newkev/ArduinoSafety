@@ -18,7 +18,7 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
 
 	def get_settings_defaults(self):
 	    return dict(
-		comport="ttyUSB0",
+		comport="ttyACM0",
 		baudrate=9600,
 		url="https://en.wikipedia.org/wiki/Hello_world"
 		)
