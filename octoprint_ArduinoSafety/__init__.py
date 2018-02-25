@@ -10,7 +10,15 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
     		self._logger.info("Hello World!")
 
 	def get_settings_defaults(self):
-	    return dict(url="https://en.wikipedia.org/wiki/Hello_world")
+	    return dict(
+		comport="COM3",
+		url="https://en.wikipedia.org/wiki/Hello_world"
+		)
+
+	def get_config_vars(self):
+		return dict(
+			comport=self._settings.get(["comport"])
+		)
 
 	def get_template_configs(self):
 	    return [
