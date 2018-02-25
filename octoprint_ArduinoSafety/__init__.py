@@ -18,5 +18,5 @@ def get_template_configs(self):
         dict(type="settings", custom_bindings=False)
     ]
 
-__plugin_name__ = "Hello World"
+__plugin_name__ = "Arduino Safety"
 __plugin_implementation__ = HelloWorldPlugin()
