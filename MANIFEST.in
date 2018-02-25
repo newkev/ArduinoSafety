@@ -1,2 +1,4 @@
 include README.md
-include requirements.txt
+recursive-include octoprint_ArduinoSafety/templates *
+recursive-include octoprint_ArduinoSafety/translations *
+recursive-include octoprint_ArduinoSafety/static *
