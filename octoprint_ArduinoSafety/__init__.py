@@ -18,7 +18,7 @@ class HelloWorldPlugin(octoprint.plugin.StartupPlugin,
 
 	def get_settings_defaults(self):
 	    return dict(
-		comport="COM3",
+		comport="ttyUSB0",
 		baudrate=9600,
 		url="https://en.wikipedia.org/wiki/Hello_world"
 		)
@@ -56,7 +56,7 @@ class SerialThread(Thread):
 	countBytesRead = 0
 	ackPending = False
 
-	#	comport = "COM3",#
+	#	comport = "ttyUSB0",#
 	# baudrate = 9600,
 
 	def __init__(self, callbackClass, config):
@@ -67,10 +67,11 @@ class SerialThread(Thread):
 
 		try:
 			self.port = serial.Serial(self.portname, baudrate=self.baudrate, timeout=3.0)
+			callbackClass.getLogger().info("Arduino Comthread started")
 		except:
 			self.interrupt()
-			callbackClass.getLogger().error("Octoremote, could not open comport:" + self.portname)
-		callbackClass.getLogger().info("Octoremote Comthread started")
+			callbackClass.getLogger().error("Could not open comport to Arduino:" + self.portname)
+	
 		self.daemon = False
 		self.start()
 
