@@ -91,7 +91,6 @@ class SerialThread(Thread):
 					humidity = readl[3:]
 				if readl.find("G:") > -1:
 					gas = readl[3:]
-				self.cbClass.getLogger().info(gas)
 			except:
 				pass
 		self.port.close()
